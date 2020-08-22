@@ -1,0 +1,6 @@
+.idea
+tmp
+bhead.log
+config/main.cfg
+config/schedule.cfg
+config/wipe.cfg

@@ -1,0 +1,29 @@
+# full path to the rust LGSM executable
+executable_path="/home/rustserver"
+
+# LGSM server configuration file (located ~/lgsm/config-lgsm/rustserver)
+lgsm_config="rustserver.cfg"
+
+# should wipes be made (schedule.cfg)
+wipe=true
+
+# should wipe plugins data (wipe.cfg)
+wipe_plugins_data=true
+
+# should wait for first month update before wipe (wipe schedule will be ignored)
+wipe_wait_month_update=true
+
+# should check and do rust server updates
+update=true
+
+# should update umod after rust server update (usually rust server update disable umod)
+umod_update=true
+
+# should umod group permissions be restored after the update (place your oxide.groups.data file inside tmp folder)
+umod_backup_groups=true
+
+# map seed that will be used on map wipe, can use "random"
+map_seed="random"
+
+# log all script action to file
+log_actions=false

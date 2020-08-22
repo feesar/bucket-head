@@ -1,0 +1,17 @@
+# The schedule works same as cronjobs, please see https://crontab.guru/
+# wipe schedule
+wipe_minute="0"
+wipe_hour="18"
+wipe_day="*"
+wipe_month="*"
+wipe_week_day="4"
+
+# wipe blueprints every x schedule/s
+wipe_bps="2"
+
+# check for update
+update_minute="*/30"
+update_hour="*"
+update_day="*"
+update_month="*"
+update_week_day="*"

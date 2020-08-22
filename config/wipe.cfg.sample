@@ -1,0 +1,5 @@
+# plugin data files to be removed on the wipe, increase number with each file (like an array)
+pd0="oxide/data/NTeleportationHome.json"
+pd1="oxide/data/NTeleportationTPR.json"
+pd2="oxide/data/AutoDoors.json"
+pd3="oxide/data/Kits_Data.json"
