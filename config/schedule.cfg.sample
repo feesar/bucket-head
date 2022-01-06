@@ -5,6 +5,7 @@ wipe_hour="18"
 wipe_day="*"
 wipe_month="*"
 wipe_week_day="4"
+wipe_month_week="*"
 
 # wipe blueprints every x schedule/s
 wipe_bps="2"
@@ -15,3 +16,4 @@ update_hour="*"
 update_day="*"
 update_month="*"
 update_week_day="*"
+update_month_week="*"
