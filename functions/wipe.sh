@@ -1,85 +1,59 @@
 #!/bin/bash
 
-MONTHLY_UPDATE=false
-
-devblog_minute="*"
-devblog_hour="*"
-devblog_day="1-7"
-devblog_month="*"
-devblog_week_day="4"
-
 if [ "$wipe" != true ]
 then
   writeLog "wipe" "Wipe is disabled"
   return 0
 fi
 
-if [ "$wipe_wait_month_update" = true ] && ! isScheduledTime "devblog"
+if isMonthlyUpdate && [ "$1" != "devblog" ]
 then
-  writeLog "wipe" "Waiting for an update of the month"
-
-  LGSM_UPDATE_TIMESTAMP="$(cat $executable_path/lgsm/lock/lastupdate.lock)"
-  LGSM_UPDATE_DATE="$(date -d @$LGSM_UPDATE_TIMESTAMP +%d-%m-%Y)"
-
-  if [ "$LGSM_UPDATE_DATE" != "$(date -d @$EXECUTION_TIME +%d-%m-%Y)" ]
-  then
-    writeLog "wipe" "Update of the month is not made yet"
-    return 0
-  fi
-
-  MONTHLY_UPDATE=true
+  writeLog "wipe" "Waiting for an update of the month or update already made"
+  return 0
 fi
 
-if [ "$MONTHLY_UPDATE" = true ] || ! isScheduledTime "wipe" && isScheduledTime "devblog"
+if isScheduledTime "wipe" || isMonthlyUpdate
 then
   writeLog "wipe" "Doing server wipe"
 
-  cd $executable_path
-
-  writeLog "wipe" "Stopping rust server"
-  ./rustserver stop
-  sleep 30
+  writeLog "wipe" "Stopping server"
+  serverManager "stop"
 
   if [ $(getLock "cycle") = "$wipe_bps" ]
   then
-    writeLog "wipe" "Doing full wipe"
-    echo "Y" | ./rustserver wa
+    writeLog "wipe" "Server full wipe"
+    serverManager "fw"
     setLock "cycle" "1"
+    WIPE_TYPE="FULL"
   else
-    writeLog "wipe" "Doing map wipe"
-    echo "Y" | ./rustserver wi
+    writeLog "wipe" "Server map wipe"
+    serverManager "mw"
     setLock "cycle" "$(($(getLock "cycle")+1))"
+    WIPE_TYPE="MAP"
   fi
 
   if [ "$wipe_plugins_data" = true ]
   then
-    writeLog "wipe" "Removing plugins temp data"
+    writeLog "wipe" "Removing plugins data"
 
-    file=0
-    while true
+    for FILE in "${delete[@]}"
     do
-      PLUGIN_ROW="pd$file"
-      PLUGIN_FILE=${!PLUGIN_ROW}
-
-      if [ ! -n "$PLUGIN_FILE" ]
-      then
-        break;
-      fi
-
-      rm $executable_path/serverfiles/$PLUGIN_FILE
-
-      file=$((file+1))
+      rm $executable_path/serverfiles/$FILE
     done
   fi
 
   writeLog "wipe" "Updating map seed"
   if [ "$map_seed" = "random" ]
   then
-    map_seed=$(( $(tr -cd 0-9 </dev/urandom | head -c 3) % 9999999))
+    map_seed=$((1 + RANDOM*RANDOM % 2147483647))
   fi
   sed -i -- 's/^seed=.*/seed="'$map_seed'"/g' $executable_path/lgsm/config-lgsm/rustserver/$lgsm_config
 
-  sleep 30
-  writeLog "wipe" "Starting rust server"
-  ./rustserver start
+  writeLog "wipe" "Starting server"
+  serverManager "start"
+
+  if [ "$wipe_webhook" != false ]
+  then
+    curl --max-time 30 --data "wipe=$WIPE_TYPE" $wipe_webhook
+  fi
 fi

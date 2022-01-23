@@ -12,8 +12,9 @@ Officially created for [Peepo Island](http://peepoisland.eu/) Rust server.
 - Removing plugin data files on wipe
 - Automated updates
 - Automated Umod(Oxide) update
-- Automated Umod(Oxide) group restore after update
+- Automated Umod(Oxide) group backup/restore after update
 - Random map seed generation
+- Webhook for wipe announcements
 
 ## Requirements
 

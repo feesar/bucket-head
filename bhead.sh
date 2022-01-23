@@ -1,26 +1,26 @@
 #!/bin/bash
 
-EXECUTION_TIME="$(date +%s)"
-BASEDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null 2>&1 && pwd)"
+EXECUTION_TIME=$(date +%s)
+BASEDIR="$(cd $(dirname "$BASH_SOURCE") > /dev/null 2>&1 && pwd)"
 AUTOLOAD=("config" "functions")
 
-if [ "$(cat $BASEDIR/lock/process.lock)" = "1" ]
+if [ $(cat $BASEDIR/lock/process.lock) = "1" ]
 then
   exit 0
 fi
 
 echo "1" > $BASEDIR/lock/process.lock
 
-for folder in "${AUTOLOAD[@]}"
+for FOLDER in "${AUTOLOAD[@]}"
 do
-  for script in "$BASEDIR"/"$folder"/*
+  for SCRIPT in "$BASEDIR"/"$FOLDER"/*
   do
-    if [[ "$script" == *"sample"* ]]
+    if [[ "$SCRIPT" == *"sample"* ]]
     then
       continue
     fi
 
-    . $script
+    . $SCRIPT
   done
 done
 
