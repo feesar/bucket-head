@@ -22,5 +22,8 @@ umod_update=true
 # should umod group permissions be restored after the update (place your oxide.groups.data file inside tmp folder)
 umod_backup_groups=true
 
+# map seed that will be used on map wipe, can use "random"
+map_seed="random"
+
 # log all script action to file
 log_actions=false

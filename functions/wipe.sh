@@ -40,6 +40,13 @@ then
     done
   fi
 
+  writeLog "wipe" "Updating map seed"
+  if [ "$map_seed" = "random" ]
+  then
+    map_seed=$((1 + RANDOM*RANDOM % 2147483647))
+  fi
+  sed -i -- 's/^seed=.*/seed="'$map_seed'"/g' $executable_path/lgsm/config-lgsm/rustserver/$lgsm_config
+
   writeLog "wipe" "Starting server"
   serverManager "start"
 fi
