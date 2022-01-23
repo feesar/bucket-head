@@ -13,6 +13,9 @@ wipe_plugins_data=true
 # should wait for first month update before wipe (wipe schedule will be ignored)
 wipe_wait_month_update=true
 
+# make webhook call on server wipe, will post "wipe" with value "FULL" or "MAP" (used for announcements)
+wipe_webhook=false
+
 # should check and do rust server updates
 update=true
 

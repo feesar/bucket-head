@@ -24,10 +24,12 @@ then
     writeLog "wipe" "Server full wipe"
     serverManager "fw"
     setLock "cycle" "1"
+    WIPE_TYPE="FULL"
   else
     writeLog "wipe" "Server map wipe"
     serverManager "mw"
     setLock "cycle" "$(($(getLock "cycle")+1))"
+    WIPE_TYPE="MAP"
   fi
 
   if [ "$wipe_plugins_data" = true ]
@@ -49,4 +51,9 @@ then
 
   writeLog "wipe" "Starting server"
   serverManager "start"
+
+  if [ "$wipe_webhook" != false ]
+  then
+    curl --max-time 30 --data "wipe=$WIPE_TYPE" $wipe_webhook
+  fi
 fi
