@@ -89,7 +89,12 @@ serverManager(){
   then
     if [[ "$OUTPUT" != *"Rust is already running"* ]]
     then
-      grep -q "Server startup complete" <(tail -f log/console/rustserver-console.log)
+      while true ; do
+        if tmux capture-pane -pt rustserver | grep -q 'SteamServer Connected' ; then
+          break
+        fi
+        sleep 1
+      done
     fi
   fi
 
@@ -97,7 +102,12 @@ serverManager(){
   then
     if [[ "$OUTPUT" != *"Rust is already stopped"* ]]
     then
-      grep -q "OnUnload()" <(tail -f log/console/rustserver-console.log)
+      while true ; do
+        if ! tmux has-session -t rustserver ; then
+          break
+        fi
+        sleep 1
+      done
     fi
   fi
 
