@@ -22,7 +22,7 @@ update=true
 # should update umod after rust server update (usually rust server update disable umod)
 umod_update=true
 
-# should umod group permissions be restored after the update (place your oxide.groups.data file inside tmp folder)
+# should umod group permissions be restored after the update
 umod_backup_groups=true
 
 # map seed that will be used on map wipe, can use "random"
