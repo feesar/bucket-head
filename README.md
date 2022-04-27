@@ -2,7 +2,7 @@
 
 Bucket Head is a bash script to automate your Rust LGSM server, doing wipes and updates so you can forget about your server management.
 
-Officially created for [Peepo Island](http://peepoisland.eu/) Rust server.
+Officially created for [Peepo Island](https://peepoisland.eu/) Rust server.
 
 ## Features
 
