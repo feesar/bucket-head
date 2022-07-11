@@ -1,4 +1,8 @@
 #!/bin/bash
+oxidecheck(){
+  curl -s 'https://assets.umod.org/games/rust.json' | \
+    python3 -c "import json,sys;obj=json.load(sys.stdin);print(obj['latest_release_at']);" | cut -f1 -d" "
+}
 
 isScheduledTime(){
   CHECK_PASS=true

@@ -10,40 +10,50 @@ writeLog "update" "Checking for server update"
 
 if [[ $(serverManager "cu") == *"Update available"* ]]
 then
-  writeLog "update" "Doing server update"
-
-  writeLog "update" "Stopping server"
-  serverManager "stop"
-
-  writeLog "update" "Updating server"
-  serverManager "u"
-
-  if [ "$umod_update" = true ]
+  if isMonthlyUpdate && [ "$umod_update" = true ]
   then
-    if [ "$umod_backup_groups" = true ]
+    if [[ $(oxidecheck) != $(date +%F) ]]
     then
-      writeLog "update" "Backup Umod groups from oxide"
-      mkdir $BASEDIR/tmp
-      mv $executable_path/serverfiles/oxide/data/oxide.groups.data $BASEDIR/tmp
+      writeLog "update" "waiting for oxide update"
+      return 0
+    fi
+  else
+    writeLog "update" "Doing server update"
+
+    writeLog "update" "Stopping server"
+    serverManager "stop"
+
+    writeLog "update" "Updating server"
+    serverManager "u"
+
+    if [ "$umod_update" = true ]
+    then
+      if [ "$umod_backup_groups" = true ]
+      then
+        writeLog "update" "Backup Umod groups from oxide"
+        mkdir $BASEDIR/tmp
+        mv $executable_path/serverfiles/oxide/data/oxide.groups.data $BASEDIR/tmp
+      fi
+
+      writeLog "update" "Updating Umod"
+      serverManager "mu"
+
+      if [ "$umod_backup_groups" = true ]
+      then
+        writeLog "update" "Restoring Umod groups from temp"
+        mv $BASEDIR/tmp/oxide.groups.data $executable_path/serverfiles/oxide/data/
+        rm -rf $BASEDIR/tmp
+      fi
     fi
 
-    writeLog "update" "Updating Umod"
-    serverManager "mu"
-
-    if [ "$umod_backup_groups" = true ]
+    if isMonthlyUpdate
     then
-      writeLog "update" "Restoring Umod groups from temp"
-      mv $BASEDIR/tmp/oxide.groups.data $executable_path/serverfiles/oxide/data/
-      rm -rf $BASEDIR/tmp
+      . $BASEDIR/functions/wipe.sh "devblog"
+      return 0
     fi
+
+    writeLog "update" "Starting server"
+    serverManager "start"
   fi
 
-  if isMonthlyUpdate
-  then
-    . $BASEDIR/functions/wipe.sh "devblog"
-    return 0
-  fi
-
-  writeLog "update" "Starting server"
-  serverManager "start"
 fi
