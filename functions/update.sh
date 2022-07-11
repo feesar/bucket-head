@@ -12,7 +12,7 @@ if [[ $(serverManager "cu") == *"Update available"* ]]
 then
   if isMonthlyUpdate && [ "$umod_update" = true ] && [[ $(oxidecheck) != $(date +%F) ]]
   then
-    writeLog "update" "waiting for oxide update"
+    writeLog "update" "Waiting for oxide update"
     exit 0
   fi
   writeLog "update" "Doing server update"
