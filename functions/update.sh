@@ -51,5 +51,7 @@ then
 
   writeLog "update" "Starting server"
   serverManager "start"
-
+else
+  writeLog "update" "Monitoring server"
+  serverManager "m"
 fi
