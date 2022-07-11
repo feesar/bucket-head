@@ -13,7 +13,7 @@ then
   if isMonthlyUpdate && [ "$umod_update" = true ] && [[ $(oxidecheck) != $(date +%F) ]]
   then
     writeLog "update" "waiting for oxide update"
-    return 0
+    exit 0
   fi
   writeLog "update" "Doing server update"
 
